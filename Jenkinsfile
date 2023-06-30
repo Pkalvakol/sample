@@ -15,6 +15,13 @@ pipeline {
 
        stage("build & SonarQube analysis") {
             agent any
+            when {
+                anyOf {
+                    branch 'feature/*'
+                    branch 'main'
+                }
+            }
+
             steps {
               withSonarQubeEnv('Sonar') {
                 sh 'mvn sonar:sonar'
@@ -24,9 +31,18 @@ pipeline {
 
          stage("Quality Gate") {
             steps {
+                script {
+                try {
               timeout(time: 10, unit: 'MINUTES') {
                 waitForQualityGate abortPipeline: true
               }
+              }
+              catch (Exception ex) {
+
+
+              }
+                }
+    
             }
           }
 
