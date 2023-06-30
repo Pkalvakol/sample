@@ -13,6 +13,12 @@ pipeline {
             }
         }
 
+        stage('sonarqube') {
+            steps {
+                
+            }
+        }
+
         stage('Push') {
             steps {
                 echo 'Push'
