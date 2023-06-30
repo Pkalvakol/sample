@@ -8,16 +8,19 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Build'
+                echo 'Building'
                 sh 'mvn package'
             }
         }
 
-        stage('sonarqube') {
+       stage("build & SonarQube analysis") {
+            agent any
             steps {
-                
+              withSonarQubeEnv('Sonar') {
+                sh 'mvn sonar:sonar'
+              }
             }
-        }
+          }
 
         stage('Push') {
             steps {
